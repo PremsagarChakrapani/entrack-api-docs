@@ -1,0 +1,3151 @@
+openapi: 3.0.0 
+
+info: 
+
+  title: EnTrack APIs
+
+  version: 1.0.0 
+
+  description: EnTrack APIs documentation for Request Bodies.
+
+
+tags:
+  - name: Entrack APIs
+
+servers: 
+
+- url: http://localhost:7071/api 
+
+components: 
+
+  securitySchemes: 
+
+    bearerAuth:  
+
+      type: http 
+
+      scheme: bearer 
+
+      bearerFormat: JWT  
+
+security: 
+
+  - bearerAuth: []  
+
+paths: 
+
+# first api 
+
+# ----------------------------------------------------------------- 
+
+  /devices/energy/active: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting active time for energy graphs 
+
+      operationId: activePeriod 
+
+       - name 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses: 
+        '200':
+
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      yearData:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            activeYear:
+                              type: integer
+                              example: 2024
+                            activeMonth:
+                              type: array
+                              items:
+                                type: integer
+                                example: 12
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  yearData:
+                    - activeYear: 2024
+                      activeMonth: [12, 11, 10, 9, 8, 7, 6, 5, 4]
+                    - activeYear: 2025
+                      activeMonth: [1]
+
+#  second api
+
+# -------------------------------------------------------------- 
+
+  /applianceEnergy: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing only type 1 appliance energy at end of prediction. 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                energyData: 
+
+                  type: array 
+
+                  items: 
+
+                    type: object 
+
+                    properties: 
+
+                      deviceId: 
+
+                        type: string 
+
+                        example: 1 
+
+                      subCategory: 
+
+                        type: string 
+
+                        example: dry iron 
+
+                      categoryId: 
+
+                        type: string 
+
+                        example: 8 
+
+                      applianceId: 
+
+                        type: string 
+
+                        example: 4 
+
+                      energy: 
+
+                        type: string 
+
+                        example: idk             
+
+      responses:
+        '200':
+          description: Success response
+          
+                  
+
+#  third api 
+
+#------------------------------------------------------------------------------- 
+
+  /applianceIdMapping: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting TTL time across labelid and deviceid 
+
+      operationId: createPayment 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties: 
+
+                orderId: 
+
+                  type: string 
+
+                amount: 
+
+                  type: number 
+
+      responses:
+        200:
+          description: Success response with empty data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items: {}
+              example:
+                statusCode: 200
+                message: "success"
+                data: []
+
+#  fourth api 
+
+#------------------------------------------------------------------------------- 
+
+  /appliances: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing appliance. 
+
+      operationId: appliances 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                energyData: 
+
+                  type: array 
+
+                  items: 
+
+                    type: object 
+
+                    properties: 
+
+                      deviceId: 
+
+                        type: string 
+
+                        example: 1 
+
+                      categoryID: 
+
+                        type: string 
+
+                        example: dry iron 
+
+                      subCategoryID: 
+
+                        type: string 
+
+                        example: 8 
+
+                      subCategoryName: 
+
+                        type: string 
+
+                        example: 4 
+
+                      CategoryType: 
+
+                        type: string 
+
+                        example: idk 
+
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      applianceId:
+                        type: string
+                        format: uuid
+                        example: "22d6690c-d223-4acc-ad29-f25289ddb5a6"
+                      labelOn:
+                        type: integer
+                        example: 17391825054131
+                      labelOff:
+                        type: integer
+                        example: 17391825045630
+                      applianceName:
+                        type: string
+                        example: "Kettle-0"
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  applianceId: "22d6690c-d223-4acc-ad29-f25289ddb5a6"
+                  labelOn: 17391825054131
+                  labelOff: 17391825045630
+                  applianceName: "Kettle-0" 
+
+#  fifth api 
+
+#------------------------------------------------------------------------------- 
+
+  /autoDiscovery: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for sending autoDiscovery request to EnergyAuditor 
+
+      operationId: autoDiscovery 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                eaDeviceId: 
+
+                  type: string 
+
+                applianceDeviceId: 
+
+                  type: string 
+
+                applianceProductCode: 
+
+                  type: string 
+
+      responses: 
+
+        "200": 
+
+          description: works 
+
+#  sixth api 
+
+#------------------------------------------------------------------------------- 
+
+  /botLife: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing and retreiving the Bot Life Data. 
+
+      operationId: botLife 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: object 
+
+            properties: 
+
+              deviceId: 
+
+                type: string 
+
+              type: 
+
+                type: number 
+
+              commonKey: 
+
+                type: string 
+
+      responses:
+        200:
+          description: Success response with different data structures
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    oneOf:
+                      - type: object
+                        properties:
+                          dailyData:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                offlineHours:
+                                  type: number
+                                  example: 0
+                                date:
+                                  type: integer
+                                  example: 1
+                      - type: object
+                        properties:
+                          monthlyData:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                offlineHours:
+                                  type: number
+                                  example: 535.1
+                                month:
+                                  type: integer
+                                  example: 1
+                      - type: object
+                        properties:
+                          currentMonthData:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                offlineHours:
+                                  type: number
+                                  example: 535.1
+              examples:
+                dailyDataExample:
+                  summary: Response for daily data
+                  value:
+                    statusCode: 200
+                    message: "success"
+                    data:
+                      dailyData:
+                        - offlineHours: 0
+                          date: 1
+                        - offlineHours: 0
+                          date: 2
+                        - offlineHours: 0.2
+                          date: 3
+                monthlyDataExample:
+                  summary: Response for monthly data
+                  value:
+                    statusCode: 200
+                    message: "success"
+                    data:
+                      monthlyData:
+                        - offlineHours: 535.1
+                          month: 1
+                        - offlineHours: 232
+                          month: 2
+                currentMonthDataExample:
+                  summary: Response for current month data
+                  value:
+                    statusCode: 200
+                    message: "success"
+                    data:
+                      currentMonthData:
+                        - offlineHours: 535.1
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing and retreiving the Bot Life Data. 
+
+      operationId: botLife 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                data:  
+
+                  type: object 
+
+                  properties:  
+
+                    startTime: 
+
+                      type: string 
+
+                    endTime: 
+
+                      type: string 
+
+                    botLifeData:  
+
+                      type: object 
+
+                      properties: 
+
+                        minItems:  
+
+                          type: number 
+
+                        items:  
+
+                          type: object 
+
+                          properties:  
+
+                            deviceId: 
+
+                              type: string 
+
+                            offlineHours: 
+
+                              type: number 
+
+      responses:
+        200:
+          description: Success response with empty data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items: {}
+              example:
+                statusCode: 200
+                message: "success"
+                data: []
+
+#  seventh api 
+
+#------------------------------------------------------------------------------- 
+
+  /categories: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting list of categories and related info to Training & Retraining. 
+
+      operationId: categories 
+
+      parameters: 
+
+      - name: AllDataFlag 
+
+        in: query 
+
+        description: Filters data based on mode (e.g., 'Training' or 'Retraining') 
+
+        required: false 
+
+        schema: 
+
+          type: integer 
+
+          enum: 
+
+          - '0' 
+
+          - '1' 
+
+        example: '0' 
+
+      responses: 
+
+        '200': 
+
+          description: Successful response with category data 
+
+          content: 
+
+            application/json: 
+
+              schema: 
+
+                oneOf: 
+
+                - description: Response for AllDataFlag=0 
+
+                  type: object 
+
+                  properties: 
+
+                    statusCode: 
+
+                      type: integer 
+
+                      example: 200 
+
+                    message: 
+
+                      type: string 
+
+                      example: success 
+
+                    data: 
+
+                      type: object 
+
+                      properties: 
+
+                        categoryData: 
+
+                          type: array 
+
+                          items: 
+
+                            type: object 
+
+                            properties: 
+
+                              id: 
+
+                                type: string 
+
+                                format: uuid 
+
+                                example: f78cdf35-f5cc-4416-8f62-296a5449fbe1 
+
+                              categoryId: 
+
+                                type: integer 
+
+                                example: 1 
+
+                              categoryName: 
+
+                                type: string 
+
+                                example: Cleaning 
+
+                              categoryAliasName: 
+
+                                type: string 
+
+                                example: Cleaning 
+
+                              additionFlag: 
+
+                                type: integer 
+
+                                example: 1 
+
+                              subCategory: 
+
+                                type: array 
+
+                                items: 
+
+                                  type: object 
+
+                                  properties: 
+
+                                    subCategoryId: 
+
+                                      type: integer 
+
+                                      example: 101 
+
+                                    subCategoryName: 
+
+                                      type: string 
+
+                                      example: Vacuum Cleaner 
+
+                                    categoryType: 
+
+                                      type: integer 
+
+                                      example: 1 
+
+                                    ttlTime: 
+
+                                      type: integer 
+
+                                      example: -1 
+
+                                    additionFlag: 
+
+                                      type: integer 
+
+                                      example: 1 
+
+                              metaData: 
+
+                                type: array 
+
+                                items: 
+
+                                  type: object 
+
+                                  properties: 
+
+                                    id: 
+
+                                      type: integer 
+
+                                      example: '1' 
+
+                                    mode: 
+
+                                      type: string 
+
+                                      example: Training 
+
+                                    count: 
+
+                                      type: integer 
+
+                                      example: '8' 
+
+                - description: Response for AllDataFlag=1 
+
+                  type: object 
+
+                  properties: 
+
+                    statusCode: 
+
+                      type: integer 
+
+                      example: 200 
+
+                    message: 
+
+                      type: string 
+
+                      example: success 
+
+                    data: 
+
+                      type: object 
+
+                      properties: 
+
+                        metaData: 
+
+                          type: array 
+
+                          items: 
+
+                            type: object 
+
+                            properties: 
+
+                              id: 
+
+                                type: string 
+
+                                example: '1' 
+
+                              mode: 
+
+                                type: string 
+
+                                example: Retraining 
+
+                              count: 
+
+                                type: integer 
+
+                                example: 8 
+
+        '400': 
+
+          description: Bad request. AllDataFlag must be equal 1 or 0 
+
+          content: 
+
+            application/json: 
+
+              schema: 
+
+                oneOf: 
+
+                - description: Response for AllDataFlag=0 
+
+                  type: object 
+
+                  properties: 
+
+                    statusCode: 
+
+                      type: integer 
+
+                      example: 400 
+
+                    message: 
+
+                      type: string 
+
+                      example: err 
+
+                    data: 
+
+                      type: array 
+
+                      example: [] 
+
+        '500': 
+
+          description: Server Error 
+
+# eighth api 
+
+# ------------------------------------------------------------------------------ 
+
+  /dataCache: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting data from cache 
+
+      operationId: dataCache 
+
+      parameters: 
+
+        - name: topic 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+          200:
+            description: Success response with notification list
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                      example: 200
+                    message:
+                      type: string
+                      example: "success"
+                    data:
+                      type: object
+                      properties:
+                        notificationList:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              eventId:
+                                type: string
+                                format: uuid
+                                example: "40594d83-7569-44d1-904d-347daf7e3776"
+                              applianceCategory:
+                                type: string
+                                example: "SplitAC"
+                              timeStamp:
+                                type: integer
+                                description: "Unix timestamp representing the event time"
+                                example: 1736428969
+                              content:
+                                type: object
+                                properties:
+                                  title:
+                                    type: string
+                                    example: "OFF"
+                                  body:
+                                    type: string
+                                    example: "SplitAC was turned ON for 7 minutes"
+                                  metaData:
+                                    type: object
+                                    additionalProperties: true
+                example:
+                  statusCode: 200
+                  message: "success"
+                  data:
+                    notificationList:
+                      - eventId: "40594d83-7569-44d1-904d-347daf7e3776"
+                        applianceCategory: "SplitAC"
+                        timeStamp: 1736428969
+                        content:
+                          title: "OFF"
+                          body: "SplitAC was turned ON for 7 minutes"
+                          metaData: {}
+                      - eventId: "e266bd34-e909-4a19-839f-6ec2f71ba486"
+                        applianceCategory: "Refrigerator"
+                        timeStamp: 1736428969
+                        content:
+                          title: "OFF"
+                          body: "Refrigerator was turned ON for 58 minutes 12 seconds"
+                          metaData: {}
+                      - eventId: "acc71659-6047-4dbd-866d-d9ed5a791780"
+                        applianceCategory: "SplitAC"
+                        timeStamp: 1736428549
+                        content:
+                          title: "ON"
+                          body: "SplitAC was turned ON"
+                          metaData: {}
+                      - eventId: "c6c2a302-8cd4-4862-a391-b7a5a007a76f"
+                        applianceCategory: "SplitAC"
+                        timeStamp: 1736427787
+                        content:
+                          title: "OFF"
+                          body: "SplitAC was turned ON for 8 minutes 54 seconds"
+                          metaData: {}
+                      - eventId: "c934d0db-bb10-4afe-8293-1e1f2851411d"
+                        applianceCategory: "Kettle"
+                        timeStamp: 1736427786
+                        content:
+                          title: "OFF"
+                          body: "Kettle-0 was turned ON for 3 minutes 53 seconds"
+                          metaData: {}
+                      - eventId: "0de5153a-b9e2-4b2a-ac12-a77c8b6576aa"
+                        applianceCategory: "Kettle"
+                        timeStamp: 1736427553
+                        content:
+                          title: "ON"
+                          body: "Kettle-0 was turned ON"
+                          metaData: {}
+                      - eventId: "06c73e54-3138-46e0-9219-ca00c6c84fe8"
+                        applianceCategory: "Kettle"
+                        timeStamp: 1736427512
+                        content:
+                          title: "OFF"
+                          body: "Kettle-0 was turned ON for 4 minutes 16 seconds"
+                          metaData: {}
+
+
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing data in cache 
+
+      operationId: dataCache 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                notificationList:  
+
+                  type: object 
+
+                  properties:  
+
+                    items: 
+
+                      type: object 
+
+                      properties: 
+
+                        eventId: 
+
+                          type: string 
+
+                        timestamp: 
+
+                          type: number 
+
+                        content: 
+
+                          type: object 
+
+                          properties: 
+
+                            title:  
+
+                              type: string 
+
+                            body: 
+
+                              type: string 
+
+                            metaData: 
+
+                              type: object                        
+
+      responses: 
+
+        "200": 
+
+          description: works 
+
+#ninth api 
+
+# ------------------------------------------------------------------------------ 
+
+  /deviceConfigurations: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for retreiving user configuration. 
+
+      operationId: deviceConfigurations 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with device energy configuration data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: "HTTP status code"
+                    example: 200
+                  message:
+                    type: string
+                    description: "Response message"
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      deviceId:
+                        type: string
+                        description: "ID of the device"
+                        example: "3390EB2BC2B190B0802198411994E6862D0A38"
+                      load:
+                        type: integer
+                        description: "Load of the device"
+                        example: 5
+                      billingCycleStartDate:
+                        type: string
+                        format: date
+                        description: "Start date of the billing cycle"
+                        example: "2025/02/01"
+                      billingCycleEndDate:
+                        type: string
+                        format: date
+                        description: "End date of the billing cycle"
+                        example: "2025/02/28"
+                      energyThreshold:
+                        type: integer
+                        description: "Energy consumption threshold"
+                        example: 200
+                      customConfig:
+                        type: object
+                        description: "Custom configuration for the device"
+                        properties:
+                          energyThreshold:
+                            type: integer
+                            description: "Energy consumption threshold in custom configuration"
+                            example: 200
+                          notificationFlag:
+                            type: integer
+                            description: "Notification flag indicating whether notifications are enabled"
+                            example: 0
+                          billingCycleStartDate:
+                            type: string
+                            format: date
+                            description: "Start date of the billing cycle in custom configuration"
+                            example: "2025/02/01"
+                          billingCycleEndDate:
+                            type: string
+                            format: date
+                            description: "End date of the billing cycle in custom configuration"
+                            example: "2025/02/28"
+      
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  deviceId: "3390EB2BC2B190B0802198411994E6862D0A38"
+                  load: 5
+                  billingCycleStartDate: "2025/02/01"
+                  billingCycleEndDate: "2025/02/28"
+                  energyThreshold: 200
+                  customConfig:
+                    energyThreshold: 200
+                    notificationFlag: 0
+                    billingCycleStartDate: "2025/02/01"
+                    billingCycleEndDate: "2025/02/28"
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing user configuration. 
+
+      operationId: deviceConfigurations 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                deviceId:  
+
+                  type: string 
+
+                energyThreshold: 
+
+                  type: number 
+
+                properties: 
+
+                  type: object 
+
+                  properties: 
+
+                    load: 
+
+                      type: number 
+
+                    billingCycle: 
+
+                      type: object 
+
+                      properties: 
+
+                        startDate:  
+
+                          type: string 
+
+                        endDate: 
+
+                          type: string                       
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+
+#tenth api
+
+#-------------------------------------------------------------------------------
+
+  /energyComparision:
+
+    get:
+      tags: 
+        - Entrack APIs
+      summary: Javascript Timer trigger function processed a request to get energy comparison wrt previous billing cycle across all deviceIds.
+
+      operationId: energyComparision
+
+      responses:
+
+        "200":
+
+          description: Successful response with Timer Trigger metadata
+
+          content:
+
+            application/json:
+
+              schema:
+
+                type: object
+
+                properties:
+
+                  energy: 
+
+                    type: number
+
+                  categoryId:
+
+                    type: number
+
+                  subCategoryId:
+
+                    type: number
+
+
+# eleventh api 
+
+#------------------------------------------------------------------------------- 
+
+  /energyDetails: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting total energy data. 
+
+      operationId: energyDetails 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: startDate 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: endDate 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        energy: 
+                          type: number
+
+                      
+
+
+#twelfth api 
+
+#------------------------------------------------------------------------------ 
+
+  /energyDetailsBreakdown: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for sending autoDiscovery request to EnergyAuditor 
+
+      operationId: autoDiscovery 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                deviceId: 
+
+                  type: string 
+
+                startDate: 
+
+                  type: string 
+
+                endDate: 
+
+                  type: string 
+
+                level: 
+
+                  type: integer 
+
+      responses:
+        200:
+          description: Success response with energy consumption data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: "HTTP status code"
+                    example: 200
+                  message:
+                    type: string
+                    description: "Response message"
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      categoryData:
+                        type: array
+                        description: "List of energy consumption by category and subcategory"
+                        items:
+                          type: object
+                          properties:
+                            categoryId:
+                              type: integer
+                              description: "ID of the category"
+                              example: 3
+                            energy:
+                              type: number
+                              format: float
+                              description: "Total energy consumption of the category"
+                              example: 5.738142377777778
+                            subCategoryData:
+                              type: array
+                              description: "List of energy consumption by subcategory"
+                              items:
+                                type: object
+                                properties:
+                                  subCategoryId:
+                                    type: integer
+                                    description: "ID of the subcategory"
+                                    example: 107
+                                  energy:
+                                    type: number
+                                    format: float
+                                    description: "Energy consumption of the subcategory"
+                                    example: 5.738142377777778
+      
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  categoryData:
+                    - categoryId: 3
+                      energy: 5.738142377777778
+                      subCategoryData:
+                        - subCategoryId: 107
+                          energy: 5.738142377777778
+                    - categoryId: 6
+                      energy: 2.038273871577381
+                      subCategoryData:
+                        - subCategoryId: 117
+                          energy: 0.9152738715773809
+                        - subCategoryId: 114
+                          energy: 1.123
+                    - categoryId: 8
+                      energy: 0.07585050648148148
+                      subCategoryData:
+                        - subCategoryId: 132
+                          energy: 0.07585050648148148
+                    - categoryId: 13
+                      energy: 19.93724803027445
+                      subCategoryData:
+                        - subCategoryId: 143
+                          energy: 19.93724803027445
+ 
+
+#thirteenth api 
+
+#------------------------------------------------------------------------------ 
+
+  /factoryResetEA: 
+
+    delete: 
+      tags: 
+        - Entrack APIs
+      summary: avaScript HTTP trigger function processed a request for removing a appliance.
+
+      operationId: factoryResetEA 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: applianceID 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+#fourteenth api 
+
+#------------------------------------------------------------------------------- 
+
+  /history: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting total energy data. 
+
+      operationId: history 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: commonKey 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: type 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: number 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    example: []
+
+#sixteenth api 
+
+#------------------------------------------------------------------------------- 
+
+  /insights: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for retreiving user configuration. 
+
+      operationId: insights 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true
+
+          schema: 
+
+            type: string 
+
+        - name: page
+
+          in: query 
+
+          required: true
+
+          schema: 
+
+            type: integer
+        
+        - name: limit
+
+          in: query 
+
+          required: true
+
+          schema: 
+
+            type: integer
+
+      responses:
+        200:
+          description: Success response with insights data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: "HTTP status code"
+                    example: 200
+                  message:
+                    type: string
+                    description: "Response message"
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      insightsData:
+                        type: array
+                        description: "List of insights"
+                        items:
+                          type: object
+                          properties:
+                            insightName:
+                              type: string
+                              description: "Name of the insight"
+                              example: "Maximum and Minimum Energy Consuming Appliances"
+                            content:
+                              type: object
+                              description: "Insight content details"
+                              properties:
+                                title:
+                                  type: string
+                                  description: "Title of the insight"
+                                  example: "Maximum and Minimum Energy Consuming Appliances"
+                                body:
+                                  type: string
+                                  description: "Detailed insight message"
+                                  example: "Maximum consuming appliance Refrigerator used the most energy this week. Minimum consuming appliance Water Heater used the least energy this week"
+                            timeStamp:
+                              type: integer
+                              description: "Timestamp of the insight event"
+                              example: 1739158203
+      
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  insightsData:
+                    - insightName: "Maximum and Minimum Energy Consuming Appliances"
+                      content:
+                        title: "Maximum and Minimum Energy Consuming Appliances"
+                        body: "Maximum consuming appliance Refrigerator used the most energy this week. Minimum consuming appliance Water Heater used the least energy this week"
+                      timeStamp: 1739158203
+                    - insightName: "Energy-Comparison"
+                      content:
+                        title: "Energy Comparison"
+                        body: "Your total energy consumption has increased by 3.9 units in this billing cycle"
+                      timeStamp: 1738294200
+ 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing user configuration. 
+
+      operationId: insights 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                deviceId:  
+
+                  type: string 
+
+                timestamp: 
+
+                  type: number 
+
+                data: 
+
+                  type: array 
+
+                  items: 
+
+                    type: object 
+
+                    properties: 
+
+                      applianceId: 
+
+                        type: string 
+
+                      applianceName: 
+
+                        type: string 
+
+                      duration: 
+
+                        type: number 
+
+                forecast: 
+
+                  type: number 
+
+                maxAppliance:  
+
+                  type: string 
+
+                minAppliance: 
+
+                  type: string 
+
+                type: 
+
+                  type: string 
+
+                changeInEnergy: 
+
+                  type: number 
+
+                categoryName: 
+
+                  type: string 
+
+                applianceName: 
+
+                  type: string 
+
+      responses:
+        200:
+          description: Success response with a list of appliances
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  insightId:
+                    type: integer
+                    description: "Insight Id"
+                    example: 1
+                  insightData:
+                    type: object
+                    description: "major payload"
+                    properties:
+                      applianceId:
+                        type: string
+                        description: "appliance Ids"
+                      applianceName:
+                        type: string
+                        description: "appliance Names"
+                      duration:
+                        type: number
+                        description: "no of hours running"
+      
+              example:
+                insightId: 1
+                insightData:
+                  applianceData:
+                    - applianceId: "118Test"
+                      applianceName: "Top Load"
+                      duration: "81362135-6090-4f01-b9f8-cb649c278bcd"
+
+
+#seventeenth api 
+
+#------------------------------------------------------------------------------- 
+
+  /listAppliances: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for retreiving user configuration. 
+
+      operationId: listAppliances 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with a list of appliances
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: "HTTP status code"
+                    example: 200
+                  message:
+                    type: string
+                    description: "Response message"
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      applianceData:
+                        type: array
+                        description: "List of appliances"
+                        items:
+                          type: object
+                          properties:
+                            subCategoryName:
+                              type: string
+                              description: "Sub-category of the appliance"
+                              example: "Top Load"
+                            applianceName:
+                              type: string
+                              description: "Name of the appliance"
+                              example: "Top Load"
+                            id:
+                              type: string
+                              description: "Unique identifier for the appliance"
+                              example: "81362135-6090-4f01-b9f8-cb649c278bcd"
+      
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  applianceData:
+                    - subCategoryName: "Top Load"
+                      applianceName: "Top Load"
+                      id: "81362135-6090-4f01-b9f8-cb649c278bcd"
+                    - subCategoryName: "Refrigerator"
+                      applianceName: "Refrigerator"
+                      id: "bd198894-5ca7-4fd9-a6b6-a5eb7e82b845"
+
+ 
+
+#eighteenth api 
+
+#------------------------------------------------------------------------------- 
+
+  /listAppliancesRetrain: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for showing list of all appliances on delete screen. 
+
+      operationId: listAppliancesRetrain 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with a list of appliances
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: "HTTP status code"
+                    example: 200
+                  message:
+                    type: string
+                    description: "Response message"
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      applianceData:
+                        type: array
+                        description: "List of appliances"
+                        items:
+                          type: object
+                          properties:
+                            categoryId:
+                              type: integer
+                              description: "Category ID of the appliance"
+                              example: 3
+                            subCategoryId:
+                              type: integer
+                              description: "Sub-category ID of the appliance"
+                              example: 107
+                            subCategoryName:
+                              type: string
+                              description: "Sub-category name of the appliance"
+                              example: "Water Heater"
+                            applianceName:
+                              type: string
+                              description: "Name of the appliance"
+                              example: "Water Heater-0"
+                            applianceId:
+                              type: string
+                              description: "Unique identifier for the appliance"
+                              example: "906d69c7-046d-4cf2-81f4-d11420a34f2f"
+      
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  applianceData:
+                    - categoryId: 3
+                      subCategoryId: 107
+                      subCategoryName: "Water Heater"
+                      applianceName: "Water Heater-0"
+                      applianceId: "906d69c7-046d-4cf2-81f4-d11420a34f2f"
+                    - categoryId: 1
+                      subCategoryId: 101
+                      subCategoryName: "Vacuum Cleaner"
+                      applianceName: "Vacuum Cleaner-0"
+                      applianceId: "8b2c0874-3fc2-451c-9b37-036305333ca1"
+
+
+#nineteenth api 
+
+#------------------------------------------------------------------------------- 
+
+  /maxMinEnergyConsumption: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: Javascript HTTP trigger function processed a request for getting maximum and minimum energy consumption appliance across all deviceIds 
+
+      operationId: maxMinEnergyConsumption 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                notificationType:  
+
+                  type: string 
+      responses:
+          200:
+            description: Success response with device details
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                      example: 200
+                    message:
+                      type: string
+                      example: "success"
+                    data:
+                      type: array
+                      example: []
+       
+
+#twentieth api 
+
+#-------------------------------------------------------------------------------   
+
+  /recentEvents: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for retrieving user configuration. 
+
+      operationId: recentEvents 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          description: Unique identifier for the device 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+        - name: page 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: integer 
+
+            minimum: 1 
+
+        - name: limit 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: integer 
+
+            minimum: 1 
+
+        - name: startDate 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+            format: date-time 
+
+        - name: endDate 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+            format: date-time 
+
+      responses:
+        200:
+          description: Success response with a list of appliance notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificationList:
+                    type: array
+                    description: "List of appliance notifications"
+                    items:
+                      type: object
+                      properties:
+                        eventId:
+                          type: string
+                          description: "Unique identifier for the event"
+                          example: "a116fdc0-827a-4da6-aecc-d044a1955465"
+                        applianceCategory:
+                          type: string
+                          description: "Category of the appliance"
+                          example: "Refrigerator"
+                        timeStamp:
+                          type: integer
+                          description: "Timestamp of the event (Unix epoch format)"
+                          example: 1727672335
+                        content:
+                          type: object
+                          description: "Details of the notification content"
+                          properties:
+                            title:
+                              type: string
+                              description: "Title of the notification"
+                              example: "ON"
+                            body:
+                              type: string
+                              description: "Notification message"
+                              example: "Refrigerator was turned ON"
+                            metaData:
+                              type: object
+                              description: "Additional metadata (if any)"
+                              example: {}
+      
+              example:
+                notificationList:
+                  - eventId: "a116fdc0-827a-4da6-aecc-d044a1955465"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727672335
+                    content:
+                      title: "ON"
+                      body: "Refrigerator was turned ON"
+                      metaData: {}
+                  - eventId: "76084a77-96d9-4319-97e3-2cc71df42b91"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727666203
+                    content:
+                      title: "OFF"
+                      body: "Refrigerator was turned ON for 48 seconds"
+                      metaData: {}
+                  - eventId: "14548c90-a703-4528-01be-c65f8fse884f"
+                    applianceCategory: "SplitAC"
+                    timeStamp: 1727660448
+                    content:
+                      title: "ON"
+                      body: "SplitAC was turned ON"
+                      metaData: {}
+ 
+
+#twenty first api 
+
+#-------------------------------------------------------------------------------       
+
+  /recentEventsv2: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing data in cache 
+
+      operationId: recentEventsv2 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                notificationList:  
+
+                  type: object 
+
+                  properties:  
+
+                    items: 
+
+                      type: object 
+
+                      properties: 
+
+                        eventId: 
+
+                          type: string 
+
+                        timestamp: 
+
+                          type: number 
+
+                        content: 
+
+                          type: object 
+
+                          properties: 
+
+                            title:  
+
+                              type: string 
+
+                            body: 
+
+                              type: string 
+
+                            metaData: 
+
+                              type: object 
+
+                        applianceCategory: 
+
+                          type: string                        
+
+      responses:
+        200:
+          description: Success response with notification list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificationList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        eventId:
+                          type: string
+                          format: uuid
+                          example: "a116fdc0-827a-4da6-aecc-d044a1955465"
+                        applianceCategory:
+                          type: string
+                          example: "Refrigerator"
+                        timeStamp:
+                          type: integer
+                          description: "Unix timestamp representing the event time"
+                          example: 1727672335
+                        content:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: "ON"
+                            body:
+                              type: string
+                              example: "Refrigerator was turned ON"
+                            metaData:
+                              type: object
+                              additionalProperties: true
+              example:
+                notificationList:
+                  - eventId: "a116fdc0-827a-4da6-aecc-d044a1955465"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727672335
+                    content:
+                      title: "ON"
+                      body: "Refrigerator was turned ON"
+                      metaData: {}
+                  - eventId: "76084a77-96d9-4319-97e3-2cc71df42b91"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727666203
+                    content:
+                      title: "OFF"
+                      body: "Refrigerator was turned ON for 48 seconds"
+                      metaData: {}
+                  - eventId: "68241f7f-cbba-4999-940f-9d7e76b5dd75"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727666155
+                    content:
+                      title: "ON"
+                      body: "Refrigerator was turned ON"
+                      metaData: {}
+                  - eventId: "14548c90-a703-4528-01be-c65f8fse884f"
+                    applianceCategory: "SplitAC"
+                    timeStamp: 1727660448
+                    content:
+                      title: "ON"
+                      body: "SplitAC was turned ON"
+                      metaData: {}
+                  - eventId: "427fab33-0f9e-46f0-b630-233f159fce16"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727660017
+                    content:
+                      title: "OFF"
+                      body: "Refrigerator was turned ON for 54 seconds"
+                      metaData: {}
+                  - eventId: "986095a4-38a1-4000-8804-bf88d021de85"
+                    applianceCategory: "Refrigerator"
+                    timeStamp: 1727659963
+                    content:
+                      title: "ON"
+                      body: "Refrigerator was turned ON"
+                      metaData: {}
+ 
+
+#twenty second api 
+
+#------------------------------------------------------------------------------- 
+
+  /removeAppliances: 
+
+    delete: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for removing a appliance. 
+
+      operationId: removeAppliances 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+        - name: applianceID 
+
+          in: query 
+
+          required: true 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+#twenty third api 
+
+#------------------------------------------------------------------------------- 
+
+  /subCategoryEnergy: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing subCategory energy at end of cron job. 
+
+      operationId: subCategoryEnergy 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                data:  
+
+                  type: object 
+
+                  properties:  
+
+                    energyData: 
+
+                      type: array 
+
+                      items: 
+
+                        type: object 
+
+                        properties: 
+
+                          deviceId:  
+
+                            type: string 
+
+                          configuredEnergy: 
+
+                            type: array 
+
+                            items: 
+
+                              type: object 
+
+                              properties: 
+
+                                categoryID: 
+
+                                  type: integer 
+
+                                subCategoryID: 
+
+                                  type: integer 
+
+                                energy: 
+
+                                  type: number 
+
+                          othersEnergy: 
+
+                            type: number 
+
+                    timestamp: 
+
+                      type: number 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+#twenty fourth api 
+
+#------------------------------------------------------------------------------- 
+
+  /subCategoryHuidMapping: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting TTL time across labelid and deviceid 
+
+      operationId: subCategoryHuidMapping 
+
+      responses:
+        200:
+          description: Success response with category-wise device data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    description: "List of appliance categories and their associated devices"
+                    items:
+                      type: object
+                      properties:
+                        subCategoryId:
+                          type: integer
+                          description: "Unique identifier for the appliance sub-category"
+                          example: 103
+                        subCategoryName:
+                          type: string
+                          description: "Name of the appliance sub-category"
+                          example: "Refrigerator"
+                        categoryType:
+                          type: integer
+                          description: "Type identifier for the category"
+                          example: 2
+                        deviceId:
+                          type: array
+                          description: "List of device IDs associated with this sub-category"
+                          items:
+                            type: string
+                          example:
+                            - "3390EB2BC2B190B0802198411908D1F95FD9B0"
+                            - "testtimestamptt"
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  - subCategoryId: 103
+                    subCategoryName: "Refrigerator"
+                    categoryType: 2
+                    deviceId:
+                      - "3390EB2BC2B190B0802198411908D1F95FD9B0"
+                      - "testtimestamptt"
+                      - "testtimestamptts"
+                  - subCategoryId: 108
+                    subCategoryName: "Top Load"
+                    categoryType: 2
+                    deviceId:
+                      - "3390EB2BC2B190B08021984119A0A3B340E488"
+                      - "981DA67BC82981343ADCBF698724D7EB8F8254"
+                  - subCategoryId: 144
+                    subCategoryName: "Split AC"
+                    categoryType: 2
+                    deviceId:
+                      - "3390EB2BC2B190B08021984119FCB4678C285C"
+                      - "3390EB2BC2B190B08021984119E05A1B5C53E8"
+#twenty fifth api 
+
+#------------------------------------------------------------------------------- 
+
+  /syncDevices: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing appliance. 
+
+      operationId: syncDevices 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          description: Unique identifier for the device 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+ 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing appliance 
+
+      operationId: syncDevices 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                data: 
+
+                  type: object 
+
+                  properties: 
+
+                    syncData: 
+
+                      type: array 
+
+                      items: 
+
+                        type: object 
+
+                        properties: 
+
+                          deviceId:  
+
+                            type: string 
+
+                          subCategoryName: 
+
+                            type: string 
+
+                          subCategoryID: 
+
+                            type: number 
+
+                          syncingState: 
+
+                            type: number 
+
+      responses:
+        200:
+          description: Success response with synchronization data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      syncData:
+                        type: array
+                        description: "List of devices and their synchronization state"
+                        items:
+                          type: object
+                          properties:
+                            deviceId:
+                              type: string
+                              description: "Unique identifier for the device"
+                              example: "testtimestamptt"
+                            subCategoryName:
+                              type: string
+                              description: "Name of the appliance sub-category"
+                              example: "Refrigerator"
+                            subCategoryId:
+                              type: integer
+                              description: "Unique identifier for the sub-category"
+                              example: 103
+                            syncingState:
+                              type: integer
+                              description: "Indicates the state of synchronization (0 - Not Syncing, 1 - Syncing)"
+                              example: 0
+              example:
+                data:
+                  syncData:
+                    - deviceId: "testtimestamptt"
+                      subCategoryName: "Refrigerator"
+                      subCategoryId: 103
+                      syncingState: 0
+  
+
+#twenty sixth api 
+
+#------------------------------------------------------------------------------- 
+
+  /totalEnergy: 
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing total energy at end of cron job. 
+
+      operationId: totalEnergy 
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                data: 
+
+                  type: object 
+
+                  properties: 
+
+                    energyData: 
+
+                      type: array 
+
+                      items: 
+
+                        type: object 
+
+                        properties: 
+
+                          deviceId: 
+
+                            type: string 
+
+                          energy: 
+
+                            type: number 
+
+                    timestamp: 
+
+                      type: number 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+#twenty eighth api 
+
+#------------------------------------------------------------------------------- 
+
+  /trainingData: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting classification data. 
+
+      operationId: trainingData 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      deviceId:
+                        type: string
+                        example: "3390EB2BC2B190B08021984119E05A1B5C51A8"
+                      deviceData:
+                        type: array
+                        description: "List of device-related data"
+                        items: {}
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  deviceId: "3390EB2BC2B190B08021984119E05A1B5C51A8"
+                  deviceData: []
+
+#twenty ninth api 
+
+#-----------------------------------------------------------------------------    
+
+  /ttlTime: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting TTL time across labelid and deviceid 
+
+      operationId: ttlTime 
+
+      parameters: 
+
+        - name: label 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with appliance details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: object
+                    properties:
+                      applianceId:
+                        type: string
+                        format: uuid
+                        example: "87dd7924-6588-452c-b7eb-b3f3ccf21247"
+                      subCategoryId:
+                        type: integer
+                        example: 117
+                      categoryId:
+                        type: integer
+                        example: 6
+                      applianceName:
+                        type: string
+                        example: "OTG-0"
+                      ttlTime:
+                        type: integer
+                        description: "Total time the appliance has been used (in minutes)"
+                        example: 540
+                      subCategoryName:
+                        type: string
+                        example: "OTG"
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  applianceId: "87dd7924-6588-452c-b7eb-b3f3ccf21247"
+                  subCategoryId: 117
+                  categoryId: 6
+                  applianceName: "OTG-0"
+                  ttlTime: 540
+                  subCategoryName: "OTG"
+
+
+ 
+
+#thirtieth api 
+
+#-----------------------------------------------------------------------------    
+
+  /type2registered: 
+
+    get:  
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting type 2 registered appliances 
+
+      operationId: type2registered 
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: false 
+
+          schema: 
+
+            type: string 
+
+      responses:
+        200:
+          description: Success response with a list of registered appliances for each device
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deviceId:
+                          type: string
+                          example: "3390EB2BC2B190B0802198411908D1F95FD9B0"
+                        registeredAppliances:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              subCategoryId:
+                                type: integer
+                                example: 103
+                              categoryId:
+                                type: integer
+                                example: 2
+                              applianceName:
+                                type: string
+                                example: "Refrigerator"
+              example:
+                statusCode: 200
+                message: "success"
+                data:
+                  - deviceId: "3390EB2BC2B190B0802198411908D1F95FD9B0"
+                    registeredAppliances:
+                      - subCategoryId: 103
+                        categoryId: 2
+                        applianceName: "Refrigerator"
+                      - subCategoryId: 108
+                        categoryId: 4
+                        applianceName: "Top Load"
+                  - deviceId: "3390EB2BC2B190B080219841192CBCBB5A7188"
+                    registeredAppliances: []
+                  - deviceId: "mohit123"
+                    registeredAppliances: []
+                  - deviceId: "solomon1"
+                    registeredAppliances: []
+
+
+
+#-------------------------------------------------------------------------------
+
+  /feedback: 
+
+    get: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for getting feedback for appliance
+
+      operationId: feedback
+
+      parameters: 
+
+        - name: deviceId 
+
+          in: query 
+
+          required: true
+
+          schema: 
+
+            type: string 
+
+        - name: feedback 
+
+          in: query 
+
+          required: true
+
+          schema: 
+
+            type: integer
+
+ 
+
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for capturing appliance 
+
+      operationId: feedback
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                data: 
+
+                  type: object 
+
+                  properties: 
+
+                    status: 
+
+                      type: number
+
+                    data: 
+
+                      type: string
+      responses:
+        200:
+          description: Success response with device details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "success"
+                  data:
+                    type: array
+
+#-------------------------------------------------------------------------------
+
+  /train: 
+    post: 
+      tags: 
+        - Entrack APIs
+      summary: JavaScript HTTP trigger function processed a request for storing training data and doing similar check.
+
+      operationId: train
+
+      requestBody: 
+
+        required: true 
+
+        content: 
+
+          application/json: 
+
+            schema: 
+
+              type: object 
+
+              properties:  
+
+                label:
+
+                  type: number
+
+                standardPower:
+
+                  type: number
+
+                deviceId:
+
+                  type: string
+
+                applianceId:
+
+                  type: string
+
+      responses:
+        200:
+          description: Success response with device and appliance data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: "List of device readings"
+                    items:
+                      type: object
+                      properties:
+                        deviceId:
+                          type: string
+                          example: "3390EB2BC2B190B08021984119782184E415F4"
+                        applianceId:
+                          type: string
+                          example: "4963ecd1-6c0a-4057-9db9-2cc347281ca3"
+                        labelId:
+                          type: integer
+                          example: 17365073570901
+                        deltaP:
+                          type: integer
+                          description: "Change in active power (in watts or milliwatts)"
+                          example: 141265
+                        deltaQ:
+                          type: integer
+                          description: "Change in reactive power"
+                          example: -857
+                        voltage:
+                          type: integer
+                          description: "Voltage measurement in millivolts"
+                          example: 22653
+              example:
+                data:
+                  - deviceId: "3390EB2BC2B190B08021984119782184E415F4"
+                    applianceId: "4963ecd1-6c0a-4057-9db9-2cc347281ca3"
+                    labelId: 17365073570901
+                    deltaP: 141265
+                    deltaQ: -857
+                    voltage: 22653
+                  - deviceId: "3390EB2BC2B190B08021984119782184E415F4"
+                    applianceId: "4963ecd1-6c0a-4057-9db9-2cc347281ca3"
+                    labelId: 17365073589490
+                    deltaP: -141177
+                    deltaQ: 807
+                    voltage: 23117
+
+#-------------------------------------------------------------------------------
